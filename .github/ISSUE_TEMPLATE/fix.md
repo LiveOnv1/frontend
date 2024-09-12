@@ -1,7 +1,7 @@
 ---
 name: fix
 about: 버그 수정
-title: fix
+title: 'fix: '
 labels: fix
 assignees: ''
 
