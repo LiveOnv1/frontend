@@ -1,14 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Div = styled.div`
-  background: black;
-  color: white;
-`;
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import HomePage from './pages/Home';
+import LoginPage from './pages/Login';
+import SignupPage from './pages/Signup';
 
 function App() {
   return (
-    <Div>hello</Div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
