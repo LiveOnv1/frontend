@@ -7,8 +7,8 @@ const LeftSidebar = () => {
     <Container>
       <CategoryCategory>카테고리</CategoryCategory>
       <CategoryContainer>
-        <CategoryList ChannelTitle={"프론트엔드"} />
-        <CategoryList ChannelTitle={"백엔드"} />
+        <CategoryList CategoryTitle={"프론트엔드"} />
+        <CategoryList CategoryTitle={"백엔드"} />
       </CategoryContainer>
       <CategoryBottom>
         {/* 로그인 or 프로필 */}

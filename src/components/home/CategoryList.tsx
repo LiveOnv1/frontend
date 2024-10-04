@@ -2,34 +2,51 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import expandIcon from '../../assets/CategoryExpandButton.png';
 import foldIcon from '../../assets/CategoryFoldButton.png';
+import { store } from '../../store/store';
+import { useStore } from 'zustand';
 
-// Props의 타입 정의
 interface CategoryListProps {
-  ChannelTitle: string; // ChannelTitle은 문자열 타입입니다.
+  CategoryTitle: string;
 }
 
-const CategoryList: React.FC<CategoryListProps> = ({ ChannelTitle }) => {
-  // 채널이 확장되었는지 여부를 관리하는 상태
+const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
+  const { selectedCategory, selectedChannel, setSelectedCategoryChannel } = useStore(store);
+
+  const handleChannelClick = (category: string, channel: string) => {
+    console.log('선택된 카테고리:', category);
+    console.log('선택된 채널:', channel);
+    
+    setSelectedCategoryChannel(category, channel);
+  };
+
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  // 확장 상태를 토글하는 함수
   const toggleChannels = () => {
     setIsExpanded((prev) => !prev);
   };
 
   return (
     <CategoryItem>
-      <CategoryItemTitle>
-        {ChannelTitle} {/* ChannelTitle prop 사용 */}
+      <CategoryItemTitle isSelected={selectedCategory === CategoryTitle}>
+        {CategoryTitle}
         <CategoryExpandButton onClick={toggleChannels}>
           <Icon src={isExpanded ? foldIcon : expandIcon} alt="expand/collapse icon" />
         </CategoryExpandButton>
       </CategoryItemTitle>
-      {/* isExpanded 상태에 따라 ChannelList를 조건부로 렌더링 */}
       {isExpanded && (
         <ChannelList>
-          <ChannelItem>#공지</ChannelItem>
-          <ChannelItem>#잡담</ChannelItem>
+          <ChannelItem 
+            isSelected={selectedCategory === CategoryTitle && selectedChannel === '공지'}
+            onClick={() => handleChannelClick(CategoryTitle, '공지')}
+          >
+            #공지
+          </ChannelItem>
+          <ChannelItem 
+            isSelected={selectedCategory === CategoryTitle && selectedChannel === '잡담'}
+            onClick={() => handleChannelClick(CategoryTitle, '잡담')}
+          >
+            #잡담
+          </ChannelItem>
           <ChannelItem>+ 채널 추가</ChannelItem>
         </ChannelList>
       )}
@@ -49,7 +66,11 @@ const CategoryItem = styled.div`
   margin-bottom: 8px;
 `;
 
-const CategoryItemTitle = styled.div`
+interface CategoryItemTitleProps {
+  isSelected: boolean;
+}
+
+const CategoryItemTitle = styled.div<CategoryItemTitleProps>`
   width: 188px;
   height: 24px;
   margin-bottom: 2px;
@@ -58,6 +79,7 @@ const CategoryItemTitle = styled.div`
   align-items: center;
   justify-content: space-between;
   color: #707070;
+  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
 `;
 
 const CategoryExpandButton = styled.div`
@@ -78,12 +100,20 @@ const ChannelList = styled.div`
   width: 204px;
 `;
 
-const ChannelItem = styled.div`
+interface ChannelItemProps {
+  isSelected?: boolean;
+}
+
+const ChannelItem = styled.div<ChannelItemProps>`
   margin: 0 0 2px 22px;
   height: 40px;
   display: flex;
   align-items: center;
   color: #707070;
+  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export default CategoryList;
