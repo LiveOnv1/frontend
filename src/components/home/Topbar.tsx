@@ -1,10 +1,13 @@
+import { useStore } from 'zustand';
+import { store } from '../../store/store';
 import styled from 'styled-components';
 import serachIcon from '../../assets/ChatSearchButton.png';
 
 const Topbar = () => {
+  const { selectedChannel } = useStore(store); 
   return (
     <Container>
-      <ChannelName>#공지</ChannelName>
+      <ChannelName>{selectedChannel ? `#${selectedChannel}` : ''}</ChannelName>
       <ChatSearch>
         <ChatSearchInput type="text" placeholder="검색" />
         <ChatSearchBtnWrapper>
