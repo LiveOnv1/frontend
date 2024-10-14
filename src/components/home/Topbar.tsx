@@ -50,6 +50,9 @@ const ChatSearchInput = styled.input`
   border: none;
   font-size: 18px;
   line-height: 22.67px;
+  &:focus {
+    outline: none;
+  }
 `;
 const ChatSearchBtnWrapper = styled.div`
   width: 30px;
