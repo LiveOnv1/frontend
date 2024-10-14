@@ -12,15 +12,6 @@ interface AuthLayoutProps {
 const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
   return (
     <Container>
-      <Topbar>
-        <HomeButtonWrapper to="/">
-          <HomeButtonIcon src={MainIcon} alt="Main icon" />
-          <HomeTitle>라이브온</HomeTitle>
-        </HomeButtonWrapper>
-        <CloseButtonWrapper to="/">
-          <CloseButtonIcon src={CloseIcon} alt="Close icon" />
-        </CloseButtonWrapper>
-      </Topbar>
       <Title title={title}>{title}</Title>
       {children}
     </Container>

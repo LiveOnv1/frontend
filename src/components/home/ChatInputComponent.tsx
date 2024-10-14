@@ -54,6 +54,9 @@ const ChatInput = styled.input`
   border: none;
   font-size: 20px;
   line-height: 24.67px;
+  &:focus {
+    outline: none;
+  }
 `;
 const ChatSendButton = styled.div`
   width: 30px;

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import CategoryList from './CategoryList';
+import ProfileIcon from '../../assets/ProfileIcon.png';
 
 const LeftSidebar = () => {
   return (
@@ -11,10 +12,8 @@ const LeftSidebar = () => {
         <CategoryList CategoryTitle={"백엔드"} />
       </CategoryContainer>
       <CategoryBottom>
-        {/* 로그인 or 프로필 */}
-        <LoginButton to="/login">
-          로그인
-        </LoginButton>
+        <ProfileImg src={ProfileIcon}/>
+        <Name>홍길동</Name>
       </CategoryBottom>
     </Container>
   );
@@ -47,24 +46,17 @@ const CategoryBottom = styled.div`
   bottom: 0;
   position: fixed;
   display: flex;
-  justify-content: center;
   align-items: center;
 `;
-const LoginButton = styled(Link)`
-  width: 192px;
+const ProfileImg = styled.img`
+  width: 50px;
   height: 50px;
-  background-color: #3081F6;
-  color: white;
-  font-size: 20px;
   border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    cursor: pointer;
-  }
-  text-decoration: none;
-  border: none;
+  margin-left: 24px;
+  margin-right: 18px;
+`;
+const Name = styled.div`
+  font-size: 20px;
 `;
 
 export default LeftSidebar;

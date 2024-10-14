@@ -13,9 +13,6 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
   const { selectedCategory, selectedChannel, setSelectedCategoryChannel } = useStore(store);
 
   const handleChannelClick = (category: string, channel: string) => {
-    console.log('선택된 카테고리:', category);
-    console.log('선택된 채널:', channel);
-    
     setSelectedCategoryChannel(category, channel);
   };
 
