@@ -33,10 +33,12 @@ const CategoryCategory = styled.div`
 `;
 const CategoryContainer = styled.div`
   width: 240px;
+  height: calc(100vh - 56px - 98px - 24px);
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 24px;
+  overflow: auto;
 `;
 const CategoryBottom = styled.div`
   width: 240px;
