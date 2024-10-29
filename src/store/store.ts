@@ -1,12 +1,19 @@
-import { createStore } from 'zustand';
+import {create} from 'zustand';
 
-interface ChannelState {
+interface AuthState {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+interface ChannelState extends AuthState {
   selectedCategory: string;
   selectedChannel: string;
   setSelectedCategoryChannel: (category: string, channel: string) => void;
 }
 
-export const store = createStore<ChannelState>()((set) => ({
+export const useStore = create<ChannelState>((set) => ({
+  isLoggedIn: !!localStorage.getItem('token'),
+  setIsLoggedIn: (value) => set({ isLoggedIn: value }),
   selectedCategory: '',
   selectedChannel: '',
   setSelectedCategoryChannel: (category, channel) =>
