@@ -2,15 +2,16 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import expandIcon from '../../assets/CategoryExpandButton.png';
 import foldIcon from '../../assets/CategoryFoldButton.png';
-import { store } from '../../store/store';
-import { useStore } from 'zustand';
+import { useStore } from '../../store/store';
 
 interface CategoryListProps {
   CategoryTitle: string;
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
-  const { selectedCategory, selectedChannel, setSelectedCategoryChannel } = useStore(store);
+  const selectedCategory = useStore((state) => state.selectedCategory);
+  const selectedChannel = useStore((state) => state.selectedChannel);
+  const setSelectedCategoryChannel = useStore((state) => state.setSelectedCategoryChannel);
 
   const handleChannelClick = (category: string, channel: string) => {
     setSelectedCategoryChannel(category, channel);

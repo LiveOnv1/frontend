@@ -1,23 +1,22 @@
-import { useStore } from 'zustand';
-import { store } from '../../store/store';
+import { useStore } from '../../store/store';
 import styled from 'styled-components';
-import serachIcon from '../../assets/ChatSearchButton.png';
+import searchIcon from '../../assets/ChatSearchButton.png';
 
 const Topbar = () => {
-  const { selectedChannel } = useStore(store); 
+  const selectedChannel = useStore((state) => state.selectedChannel); 
+
   return (
     <Container>
       <ChannelName>{selectedChannel ? `#${selectedChannel}` : ''}</ChannelName>
       <ChatSearch>
         <ChatSearchInput type="text" placeholder="검색" />
         <ChatSearchBtnWrapper>
-          <Icon src={serachIcon} alt="serach icon" />
+          <Icon src={searchIcon} alt="search icon" />
         </ChatSearchBtnWrapper>
       </ChatSearch>
     </Container>
   );
-}
-
+};
 const Container = styled.div`
   width: 100%;
   height: 76px;

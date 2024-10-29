@@ -5,7 +5,7 @@ import OnboardingIcon from '../../assets/OnboardingIcon.png';
 
 interface AuthFormProps {
   mode: 'login' | 'signup' | 'onboarding';
-  onAuthSubmit?: (id: string, password: string, name?: string) => void;
+  onAuthSubmit?: (id: string, password: string, name?: string, picture?: string) => void;
   children?: React.ReactNode;
 }
 
@@ -13,12 +13,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, onAuthSubmit, children }) => 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [picture, setPicture] = useState('');
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (onAuthSubmit) {
       if (mode === 'signup') {
-        onAuthSubmit(id, password, name);
+        onAuthSubmit(id, password, name, picture);
       } else {
         onAuthSubmit(id, password);
       }
