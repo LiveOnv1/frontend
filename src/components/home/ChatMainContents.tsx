@@ -23,14 +23,20 @@ const ChatMainContents = () => {
   const selectedCategory = useStore((state) => state.selectedCategory);
   const selectedChannel = useStore((state) => state.selectedChannel);
   const [chats, setChats] = useState<Chat[]>([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchChats = async () => {
-      const idx = selectedCategory == '백엔드' ? 0 : ('프론트엔드' ? 1 : -1)
-      const data: Category = await getChats(idx); // getChats의 반환값 타입 지정
-      const filteredChats = data.channels
-        .find((ch) => ch.channelName === selectedChannel)?.chats || [];
-      setChats(filteredChats);
+      try{
+        const idx = selectedCategory == '백엔드' ? 0 : ('프론트엔드' ? 1 : -1)
+        const data: Category = await getChats(idx); // getChats의 반환값 타입 지정
+        const filteredChats = data.channels
+          .find((ch) => ch.channelName === selectedChannel)?.chats || [];
+        setChats(filteredChats);
+        setError(false);
+      }catch{
+        setError(true);
+      }
     };
     fetchChats();
   }, [selectedCategory, selectedChannel]);
@@ -38,23 +44,28 @@ const ChatMainContents = () => {
   return (
     <Container>
         <Content>
-          {chats.map((chat, index) => (
-            <ChatWrapper key={index}>
-              <ChatProfileImg src={ProfileIcon}/>
-              <ChatContentWrapper>
-                <ChatSender>{chat.sender}</ChatSender>
-                <ChatCTWraper>
-                  <ChatContent>{chat.content}</ChatContent>
-                  <ChatTime>
-                    {new Date(chat.timestamp).toLocaleTimeString("ko-KR", { 
-                      hour: "numeric",
-                      minute: "numeric",
-                      hour12: true,})}
-                  </ChatTime>
-                </ChatCTWraper>
-              </ChatContentWrapper>
-            </ChatWrapper>
-          ))}
+        {error ? (
+            <ErrorMessage>채팅을 불러오지 못했습니다. 관리자에게 문의해주세요.</ErrorMessage> // 에러 메시지 표시
+          ) : (
+            chats.map((chat, index) => (
+              <ChatWrapper key={index}>
+                <ChatProfileImg src={ProfileIcon}/>
+                <ChatContentWrapper>
+                  <ChatSender>{chat.sender}</ChatSender>
+                  <ChatCTWraper>
+                    <ChatContent>{chat.content}</ChatContent>
+                    <ChatTime>
+                      {new Date(chat.timestamp).toLocaleTimeString("ko-KR", { 
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })}
+                    </ChatTime>
+                  </ChatCTWraper>
+                </ChatContentWrapper>
+              </ChatWrapper>
+            ))
+          )}
         </Content>
     </Container>
   );
@@ -104,6 +115,12 @@ const ChatTime = styled.div`
 `;
 const ChatCTWraper = styled.div`
   display: flex;
+`;
+const ErrorMessage = styled.div`
+  display:flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
 
