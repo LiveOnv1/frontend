@@ -43,30 +43,37 @@ const ChatMainContents = () => {
 
   return (
     <Container>
-        <Content>
-        {error ? (
-            <ErrorMessage>채팅을 불러오지 못했습니다. 관리자에게 문의해주세요.</ErrorMessage> // 에러 메시지 표시
-          ) : (
-            chats.map((chat, index) => (
-              <ChatWrapper key={index}>
-                <ChatProfileImg src={ProfileIcon}/>
-                <ChatContentWrapper>
-                  <ChatSender>{chat.sender}</ChatSender>
-                  <ChatCTWraper>
-                    <ChatContent>{chat.content}</ChatContent>
-                    <ChatTime>
-                      {new Date(chat.timestamp).toLocaleTimeString("ko-KR", { 
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                      })}
-                    </ChatTime>
-                  </ChatCTWraper>
-                </ChatContentWrapper>
-              </ChatWrapper>
-            ))
-          )}
-        </Content>
+        {selectedChannel ? 
+          (
+            <Content>
+              {error ? (
+                  <ErrorMessage>채팅을 불러오지 못했습니다. 관리자에게 문의해주세요.</ErrorMessage> // 에러 메시지 표시
+                ) : (
+                  chats.map((chat, index) => (
+                    <ChatWrapper key={index}>
+                      <ChatProfileImg src={ProfileIcon}/>
+                      <ChatContentWrapper>
+                        <ChatSender>{chat.sender}</ChatSender>
+                        <ChatCTWraper>
+                          <ChatContent>{chat.content}</ChatContent>
+                          <ChatTime>
+                            {new Date(chat.timestamp).toLocaleTimeString("ko-KR", { 
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                            })}
+                          </ChatTime>
+                        </ChatCTWraper>
+                      </ChatContentWrapper>
+                    </ChatWrapper>
+                  ))
+              )}
+            </Content>
+          ) 
+        : 
+          (null)
+        }
+        
     </Container>
   );
 }

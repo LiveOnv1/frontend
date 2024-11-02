@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import expandIcon from '../../assets/CategoryExpandButton.png';
 import foldIcon from '../../assets/CategoryFoldButton.png';
 import { useStore } from '../../store/store';
+import Modal from '../common/modal';
 
 interface CategoryListProps {
   CategoryTitle: string;
@@ -18,10 +19,14 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
   };
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleChannels = () => {
     setIsExpanded((prev) => !prev);
   };
+
+  const handleAddChannelClick = () => setIsModalVisible(true);
+  const closeModal = () => setIsModalVisible(false);  
 
   return (
     <CategoryItem>
@@ -45,9 +50,10 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
           >
             #잡담
           </ChannelItem>
-          <ChannelItem>+ 채널 추가</ChannelItem>
+          <ChannelItem onClick={handleAddChannelClick}>+ 채널 추가</ChannelItem>
         </ChannelList>
       )}
+      {isModalVisible && <Modal onClose={closeModal} />}
     </CategoryItem>
   );
 };
