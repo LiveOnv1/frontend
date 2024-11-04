@@ -1,17 +1,30 @@
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
+import CloseIcon from '../../assets/CloseIcon.png';
 
-const Modal = ({ onClose }: { onClose: () => void }) => {
+interface ModalProps {
+  onClose: () => void;
+  title: string;
+  button: string;
+}
+
+const Modal = ({ onClose, title, button }: ModalProps) => {
   return ReactDOM.createPortal(
     <>
       <Backdrop onClick={onClose}/>
       <ModalContainer>
         <ModalTop>
-          <ModalTitle />
-          <ModalClose onClick={onClose}/>
+          <ModalTitle>{title}</ModalTitle>
+          <ModalClose onClick={onClose}>
+            <Icon src={CloseIcon}></Icon>
+          </ModalClose>
         </ModalTop>
-        <ModalInput />
-        <ModalConfirm />
+        <ModalInputWrapper>
+          <ModalInput placeholder="새로운 채널" />
+        </ModalInputWrapper>
+        <ModalConfirmWrapper>
+          <ModalConfirm>{button}</ModalConfirm>
+        </ModalConfirmWrapper>
       </ModalContainer>
     </>,
     document.getElementById('root') as HTMLElement
@@ -38,11 +51,65 @@ const Backdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 const ModalTitle = styled.div`
-  
+  font-size: 24px;
+  margin: 30px 0 0 52px;
+  width: 106px;
 `;
-const ModalTop = styled.div``;
-const ModalClose = styled.div``;
-const ModalInput = styled.input``;
-const ModalConfirm = styled.div``;
+const ModalTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ModalClose = styled.div`
+  width: 24px;
+  height: 24px;
+  margin-top: 34px;  
+  margin-right: 38px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const ModalInputWrapper = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;  
+`;
+const ModalInput = styled.input`
+  width: 388px;
+  height: 60px;  
+  border: 1px solid #D1D4D6;
+  border-radius: 15px;
+  padding: 0 30px 0 30px;
+  font-size: 16px;
+  &:focus {
+    outline-color: #3081f6;
+  }
+`;
+const ModalConfirmWrapper = styled.div`
+  width: 100%;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;  
+`;
+const ModalConfirm = styled.div`
+  width: 448px;
+  height: 48px;
+  background-color: #3081F6;
+  color: white;
+  border-radius: 15px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content : center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+`;
 
 export default Modal;

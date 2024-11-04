@@ -53,7 +53,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
           <ChannelItem onClick={handleAddChannelClick}>+ 채널 추가</ChannelItem>
         </ChannelList>
       )}
-      {isModalVisible && <Modal onClose={closeModal} />}
+      {isModalVisible && <Modal onClose={closeModal} title="채널 생성" button="생성"/>}
     </CategoryItem>
   );
 };
