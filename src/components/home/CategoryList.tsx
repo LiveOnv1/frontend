@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import expandIcon from '../../assets/CategoryExpandButton.png';
 import foldIcon from '../../assets/CategoryFoldButton.png';
+import TrashIcon from '../../assets/TrashIcon.png';
 import { useStore } from '../../store/store';
 import Modal from '../common/modal';
 
@@ -19,14 +20,23 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
   };
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalType, setModalType] = useState<"create" | "delete" | null>(null);
 
   const toggleChannels = () => {
     setIsExpanded((prev) => !prev);
   };
 
-  const handleAddChannelClick = () => setIsModalVisible(true);
-  const closeModal = () => setIsModalVisible(false);  
+  const handleAddChannelClick = () => {
+    setModalType("create");
+  };
+
+  const handleDeleteChannelClick = () => {
+    setModalType("delete");
+  };
+
+  const closeModal = () => {
+    setModalType(null);
+  };
 
   return (
     <CategoryItem>
@@ -43,17 +53,21 @@ const CategoryList: React.FC<CategoryListProps> = ({ CategoryTitle }) => {
             onClick={() => handleChannelClick(CategoryTitle, '공지')}
           >
             #공지
+            <Icon src={TrashIcon} className="trash-icon" isTrashIcon onClick={handleDeleteChannelClick} />
           </ChannelItem>
           <ChannelItem 
             isSelected={selectedCategory === CategoryTitle && selectedChannel === '잡담'}
             onClick={() => handleChannelClick(CategoryTitle, '잡담')}
           >
             #잡담
+            <Icon src={TrashIcon} className="trash-icon" isTrashIcon onClick={handleDeleteChannelClick} />
           </ChannelItem>
           <ChannelItem onClick={handleAddChannelClick}>+ 채널 추가</ChannelItem>
         </ChannelList>
       )}
-      {isModalVisible && <Modal onClose={closeModal} title="채널 생성" button="생성"/>}
+      {modalType && (
+        <Modal type={modalType} onClose={closeModal} />
+      )}
     </CategoryItem>
   );
 };
@@ -95,9 +109,18 @@ const CategoryExpandButton = styled.div`
   }
 `;
 
-const Icon = styled.img`
-  width: 24px;
-  height: 24px;
+interface IconProps {
+  isTrashIcon?: boolean;
+}
+
+const Icon = styled.img<IconProps>`
+  width: ${({ isTrashIcon }) => (isTrashIcon ? '15px' : '24px')};
+  height: ${({ isTrashIcon }) => (isTrashIcon ? '15px' : '24px')};
+  padding: ${({ isTrashIcon }) => (isTrashIcon ? '5px;' : '0')};
+  border-radius: ${({ isTrashIcon }) => (isTrashIcon ? '5px;' : '0')};
+  &:hover {
+    background-color: ${({ isTrashIcon }) => (isTrashIcon ? '#C8C7C7' : 'none')};
+  }
 `;
 
 const ChannelList = styled.div`
@@ -109,14 +132,26 @@ interface ChannelItemProps {
 }
 
 const ChannelItem = styled.div<ChannelItemProps>`
-  margin: 0 0 2px 22px;
+  margin-bottom: 2px;
+  padding: 0 17px 0 22px;
   height: 40px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   color: #707070;
+  border-radius: 10px;
   font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
   &:hover {
     cursor: pointer;
+    background-color: #E8E8E8;
+  }
+  &:hover .trash-icon {
+    display: inline;
+  }
+  .trash-icon {
+    display: none; /* Hide by default */
+    width: 15px;
+    height: 15px;
   }
 `;
 

@@ -1,44 +1,61 @@
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 import CloseIcon from '../../assets/CloseIcon.png';
+import {useState} from 'react';
 
 interface ModalProps {
   onClose: () => void;
-  title: string;
-  button: string;
+  type: 'create' | 'delete';
 }
 
-const Modal = ({ onClose, title, button }: ModalProps) => {
+const Modal = ({ onClose, type }: ModalProps) => {
   return ReactDOM.createPortal(
     <>
       <Backdrop onClick={onClose}/>
-      <ModalContainer>
-        <ModalTop>
-          <ModalTitle>{title}</ModalTitle>
-          <ModalClose onClick={onClose}>
-            <Icon src={CloseIcon}></Icon>
-          </ModalClose>
-        </ModalTop>
-        <ModalInputWrapper>
-          <ModalInput placeholder="새로운 채널" />
-        </ModalInputWrapper>
-        <ModalConfirmWrapper>
-          <ModalConfirm>{button}</ModalConfirm>
-        </ModalConfirmWrapper>
-      </ModalContainer>
-    </>,
-    document.getElementById('root') as HTMLElement
-  );
+        <ModalContainer modalType={type}>
+          <ModalTop modalType={type}>
+            <ModalTitle modalType={type}>{type == 'create' ? '채널 생성' : '정말 채널을 나가시겠습니까?'}</ModalTitle> 
+            {type == 'create' ?
+              <ModalClose onClick={onClose}>
+                <Icon src={CloseIcon}></Icon>
+              </ModalClose>
+            :null}  
+          </ModalTop>
+          {type == 'create' ?
+            <ModalInputWrapper>
+              <ModalInput placeholder="새로운 채널" />
+            </ModalInputWrapper> 
+          :null}   
+          <ModalConfirmWrapper modalType={type}>
+            {type == 'create'?
+              <ModalConfirm modalType={type}>확인</ModalConfirm>
+            :
+              <>
+                <ModalCancel onClick={onClose}>취소</ModalCancel>
+                <ModalConfirm modalType={type}>나가기</ModalConfirm>
+              </>
+            }
+            
+          </ModalConfirmWrapper>
+        </ModalContainer>
+      </>
+      ,
+      document.getElementById('root') as HTMLElement
+      
+    );
 }
 
-const ModalContainer = styled.div`
+interface ModalTypeProps {
+  modalType: 'create' | 'delete';
+}
+const ModalContainer = styled.div<ModalTypeProps>`
   position: fixed;
   z-index: 1001;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 512px;
-  height: 240px;
+  height: ${({ modalType }) => (modalType === 'create' ? '240px' : '172px')};
   background-color: white;
   border-radius: 20px;
 `;
@@ -50,14 +67,16 @@ const Backdrop = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
 `;
-const ModalTitle = styled.div`
+const ModalTitle = styled.div<ModalTypeProps>`
   font-size: 24px;
-  margin: 30px 0 0 52px;
-  width: 106px;
-`;
-const ModalTop = styled.div`
+  margin: ${({ modalType }) => (modalType === 'create' ? '30px 0 0 52px' : '38px 0 0 0')};
+  width: ${({ modalType }) => (modalType === 'create' ? '106px' : '512px')};
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+`;
+const ModalTop = styled.div<ModalTypeProps>`
+  display: flex;
+  justify-content: ${({ modalType }) => (modalType === 'create' ? 'space-between' : 'center')};
 `;
 const ModalClose = styled.div`
   width: 24px;
@@ -86,18 +105,32 @@ const ModalInput = styled.input`
     outline-color: #3081f6;
   }
 `;
-const ModalConfirmWrapper = styled.div`
+const ModalConfirmWrapper = styled.div<ModalTypeProps>`
   width: 100%;
   height: 48px;
   display: flex;
-  justify-content: center;
-  margin-top: 24px;  
+  justify-content: ${({ modalType }) => (modalType === 'create' ? 'center' : 'space-evenly')};
+  margin-top: 24px;
 `;
-const ModalConfirm = styled.div`
-  width: 448px;
+const ModalConfirm = styled.div<ModalTypeProps>`
+  width: ${({ modalType }) => (modalType === 'create' ? '448px' : '212px')};
   height: 48px;
-  background-color: #3081F6;
+  background-color: ${({ modalType }) => (modalType === 'create' ? '#3081F6' : '#FC4F4F')};
   color: white;
+  border-radius: 15px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content : center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const ModalCancel = styled.div`
+  width: 212px;
+  height: 48px;
+  background-color: #ECECEC;
+  color: #7A7878;
   border-radius: 15px;
   font-size: 22px;
   display: flex;
