@@ -1,20 +1,31 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import ChannelList from './ChannelList';
 import ProfileIcon from '../../assets/ProfileIcon.png';
+import { useState } from 'react';
+import UserMenu from './UserMenu';
 
 const LeftSidebar = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const toggleUserMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <Container>
-      <SidebarTitle>LiveOn</SidebarTitle>
-      <ChannelContainer>
-        <ChannelList />
-      </ChannelContainer>
-      <LeftSidebarBottom>
-        <ProfileImg src={ProfileIcon}/>
-        <Name>홍길동</Name>
-      </LeftSidebarBottom>
-    </Container>
+    <>
+      <Container>
+        <SidebarTitle>LiveOn</SidebarTitle>
+        <ChannelContainer>
+          <ChannelList />
+        </ChannelContainer>
+        <LeftSidebarBottom onClick={toggleUserMenu}>
+          <ProfileContainer>
+            <ProfileImg src={ProfileIcon}/>
+            <Name>홍길동</Name>
+          </ProfileContainer>
+        </LeftSidebarBottom>
+      </Container>
+      {isOpen && <UserMenu />}
+    </>
   );
 }
 
@@ -49,6 +60,18 @@ const LeftSidebarBottom = styled.div`
   position: fixed;
   display: flex;
   align-items: center;
+  padding-left: 13.5px;
+`;
+const ProfileContainer = styled.div`
+  width: 212px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+    background-color: #D3E5FF;
+  }
 `;
 const ProfileImg = styled.img`
   width: 50px;
