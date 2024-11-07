@@ -7,7 +7,7 @@ const Topbar = () => {
 
   return (
     <Container>
-      <ChannelName>{selectedChannel ? `#${selectedChannel}` : ''}</ChannelName>
+      <ChannelName>{selectedChannel ? `# ${selectedChannel}` : ''}</ChannelName>
       <ChatSearch>
         <ChatSearchInput type="text" placeholder="검색" />
         <ChatSearchBtnWrapper>

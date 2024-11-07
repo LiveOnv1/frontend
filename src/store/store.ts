@@ -6,16 +6,14 @@ interface AuthState {
 }
 
 interface ChannelState extends AuthState {
-  selectedCategory: string;
   selectedChannel: string;
-  setSelectedCategoryChannel: (category: string, channel: string) => void;
+  setSelectedChannel: (channel: string) => void;
 }
 
 export const useStore = create<ChannelState>((set) => ({
   isLoggedIn: !!localStorage.getItem('token'),
   setIsLoggedIn: (value) => set({ isLoggedIn: value }),
-  selectedCategory: '',
   selectedChannel: '',
-  setSelectedCategoryChannel: (category, channel) =>
-    set({ selectedCategory: category, selectedChannel: channel }),
+  setSelectedChannel: (channel) =>
+    set({selectedChannel: channel }),
 }));
