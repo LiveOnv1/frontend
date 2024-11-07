@@ -1,14 +1,17 @@
-// src/pages/Login.tsx
 import styled from 'styled-components';
 import AuthForm from '../components/common/AuthForm';
 import AuthLayout from '../components/common/AuthLayout';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useStore } from '../store/store';
 
 const Login = () => {
   const URL = 'http://3.39.74.178:8080';
+  const navigate = useNavigate();
+  const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
 
   const handleLogin = async (id: string, password: string) => {
+    
     try {
       const response = await axios.post(URL + '/api/login', {
         personId: id,
@@ -17,11 +20,12 @@ const Login = () => {
 
       console.log("Login successful:", response.data);
       localStorage.setItem('token', response.data.token);
-      window.location.href = "/";
-      
+      setIsLoggedIn(true);
+      navigate('/home');
+
     } catch (error) {
       console.error("Login failed", error);
-      alert('Login failed. Please try again.');
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
   };
 
