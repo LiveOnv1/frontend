@@ -4,35 +4,53 @@ import CloseIcon from '../../assets/CloseIcon.png';
 import {useState} from 'react';
 
 interface ModalProps {
-  onClose: () => void;
-  type: 'create' | 'delete';
+  type: string;
+  onClose: (type:string) => void;
+  onConfirm: (channelName: string) => void;
 }
 
-const Modal = ({ onClose, type }: ModalProps) => {
+const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
+  const [channelName, setChannelName] = useState('');
+
+  const handleClose = () => {
+    const newValue = '';
+    onClose(newValue);
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChannelName(e.target.value);
+  };
+  const handleConfirm = () => {
+    if (type === 'create') {
+      onConfirm(channelName);
+    } else if(type === 'delete'){
+      onConfirm('');
+    }
+  };
+  
   return ReactDOM.createPortal(
     <>
-      <Backdrop onClick={onClose}/>
+      <Backdrop onClick={handleClose}/>
         <ModalContainer modalType={type}>
           <ModalTop modalType={type}>
-            <ModalTitle modalType={type}>{type == 'create' ? '채널 생성' : '정말 채널을 나가시겠습니까?'}</ModalTitle> 
+            <ModalTitle modalType={type}>{type == 'create' ? '채널 생성' : '채널을 나가시겠습니까?'}</ModalTitle> 
             {type == 'create' ?
-              <ModalClose onClick={onClose}>
+              <ModalClose onClick={handleClose}>
                 <Icon src={CloseIcon}></Icon>
               </ModalClose>
-            :null}  
+            :null}
           </ModalTop>
           {type == 'create' ?
             <ModalInputWrapper>
-              <ModalInput placeholder="새로운 채널" />
+              <ModalInput placeholder="새로운 채널" onChange={handleInputChange} />
             </ModalInputWrapper> 
           :null}   
           <ModalConfirmWrapper modalType={type}>
             {type == 'create'?
-              <ModalConfirm modalType={type}>확인</ModalConfirm>
+              <ModalConfirm modalType={type} onClick={handleConfirm}>확인</ModalConfirm>
             :
               <>
-                <ModalCancel onClick={onClose}>취소</ModalCancel>
-                <ModalConfirm modalType={type}>나가기</ModalConfirm>
+                <ModalCancel onClick={handleClose}>취소</ModalCancel>
+                <ModalConfirm modalType={type} onClick={handleConfirm}>나가기</ModalConfirm>
               </>
             }
             
@@ -46,7 +64,7 @@ const Modal = ({ onClose, type }: ModalProps) => {
 }
 
 interface ModalTypeProps {
-  modalType: 'create' | 'delete';
+  modalType: string;
 }
 const ModalContainer = styled.div<ModalTypeProps>`
   position: fixed;

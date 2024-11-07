@@ -20,7 +20,6 @@ interface Category {
 }
 
 const ChatMainContents = () => {
-  const selectedCategory = useStore((state) => state.selectedCategory);
   const selectedChannel = useStore((state) => state.selectedChannel);
   const [chats, setChats] = useState<Chat[]>([]);
   const [error, setError] = useState(false);
@@ -28,8 +27,8 @@ const ChatMainContents = () => {
   useEffect(() => {
     const fetchChats = async () => {
       try{
-        const idx = selectedCategory == '백엔드' ? 0 : ('프론트엔드' ? 1 : -1)
-        const data: Category = await getChats(idx); // getChats의 반환값 타입 지정
+        //const idx = selectedCategory == '백엔드' ? 0 : ('프론트엔드' ? 1 : -1)
+        const data: Category = await getChats(); // getChats의 반환값 타입 지정
         const filteredChats = data.channels
           .find((ch) => ch.channelName === selectedChannel)?.chats || [];
         setChats(filteredChats);
@@ -39,7 +38,7 @@ const ChatMainContents = () => {
       }
     };
     fetchChats();
-  }, [selectedCategory, selectedChannel]);
+  }, [selectedChannel]);
 
   return (
     <Container>

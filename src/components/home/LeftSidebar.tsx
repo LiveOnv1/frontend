@@ -1,20 +1,19 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import CategoryList from './CategoryList';
+import ChannelList from './ChannelList';
 import ProfileIcon from '../../assets/ProfileIcon.png';
 
 const LeftSidebar = () => {
   return (
     <Container>
-      <CategoryCategory>카테고리</CategoryCategory>
-      <CategoryContainer>
-        <CategoryList CategoryTitle={"프론트엔드"} />
-        <CategoryList CategoryTitle={"백엔드"} />
-      </CategoryContainer>
-      <CategoryBottom>
+      <SidebarTitle>LiveOn</SidebarTitle>
+      <ChannelContainer>
+        <ChannelList />
+      </ChannelContainer>
+      <LeftSidebarBottom>
         <ProfileImg src={ProfileIcon}/>
         <Name>홍길동</Name>
-      </CategoryBottom>
+      </LeftSidebarBottom>
     </Container>
   );
 }
@@ -25,13 +24,14 @@ const Container = styled.div`
   border-right: 1px solid #E4E8EB;
   box-sizing: border-box;
   position: fixed;
+  background-color: #E9F6FF;
 `;
-const CategoryCategory = styled.div`
+const SidebarTitle = styled.div`
   font-size: 24px;
   margin: 24px 0 0 24px;
-  color: #707070;
+  font-weight: bold;
 `;
-const CategoryContainer = styled.div`
+const ChannelContainer = styled.div`
   width: 240px;
   height: calc(100vh - 56px - 98px - 24px);
   display: flex;
@@ -40,7 +40,7 @@ const CategoryContainer = styled.div`
   margin-top: 24px;
   overflow: auto;
 `;
-const CategoryBottom = styled.div`
+const LeftSidebarBottom = styled.div`
   width: 240px;
   height: 98px;
   border-top: 1px solid #E4E8EB;
