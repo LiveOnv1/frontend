@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import expandIcon from '../../assets/ChannelExpandButton.png';
 import foldIcon from '../../assets/ChannelFoldButton.png';
-import TrashIcon from '../../assets/TrashIcon.png';
 import { useStore } from '../../store/store';
 import Modal from '../common/modal';
 import { getChannel, postChannel } from '../../api/channelApi';
@@ -32,10 +31,6 @@ const ChannelList = () => {
     setModalType("create");
   };
 
-  const handleDeleteChannelClick = () => {
-    setModalType("delete");
-  };
-
   const handleCreateConfirm = async (channelName: string) => {
     try{
       await postChannel(channelName);
@@ -46,10 +41,6 @@ const ChannelList = () => {
       console.log("Failed to create channels.")
       alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.")  
     }
-  };
-  const handleLeaveConfirm = () => {
-    setModalType("");
-    setSelectedChannel("");
   };
 
   useEffect(() => {
@@ -84,14 +75,13 @@ const ChannelList = () => {
               <>
               # {channel.chatRoomName}
               </>
-              <Icon src={TrashIcon} className="trash-icon" isTrashIcon onClick={handleDeleteChannelClick} />
             </ChannelItem>
           ))}
           <ChannelItem onClick={handleAddChannelClick}>+ 채널 추가</ChannelItem>
         </ChannelItemContainer>
       )}
       {modalType && (
-        <Modal type={modalType} onClose={setModalType} onConfirm={modalType == 'create' ? handleCreateConfirm : handleLeaveConfirm } />
+        <Modal type={modalType} onClose={setModalType} onConfirm={handleCreateConfirm} />
       )}
     </ChannelListContainer>
   );
@@ -129,18 +119,11 @@ const ChannelExpandButton = styled.div`
   padding: 8px;
 `;
 
-interface IconProps {
-  isTrashIcon?: boolean;
-}
-
-const Icon = styled.img<IconProps>`
-  width: ${({ isTrashIcon }) => (isTrashIcon ? '15px' : '24px')};
-  height: ${({ isTrashIcon }) => (isTrashIcon ? '15px' : '24px')};
-  padding: ${({ isTrashIcon }) => (isTrashIcon ? '5px;' : '0')};
-  border-radius: ${({ isTrashIcon }) => (isTrashIcon ? '5px;' : '0')};
-  &:hover {
-    background-color: ${({ isTrashIcon }) => (isTrashIcon ? '#70A5F2' : 'none')};
-  }
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 0;
 `;
 
 const ChannelItemContainer = styled.div`
