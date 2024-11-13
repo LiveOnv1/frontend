@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 import CloseIcon from '../../assets/CloseIcon.png';
-import {useState} from 'react';
+import {useState, useRef, useEffect } from 'react';
 
 interface ModalProps {
   type: string;
@@ -11,24 +11,45 @@ interface ModalProps {
 
 const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
   const [channelName, setChannelName] = useState('');
-
+  const [errorMsg, setErrorMsg] = useState('');
+  const [disabled, setDisabled] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [type]);
   const handleClose = () => {
     const newValue = '';
     onClose(newValue);
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChannelName(e.target.value);
+    setErrorMsg('');
   };
-  const handleConfirm = () => {
-    if (type === 'create') {
+  const handleConfirm = (e: React.FormEvent) => {
+    e.preventDefault();
+    if(channelName.length <= 0){
+      setErrorMsg('채널이름을 입력해주세요');
+    }else if (type === 'create') {
       onConfirm(channelName);
+      // try{
+      //   await postChannel(channelName);
+      //   getChannel();
+      //   setSelectedChannel(channelName);
+      //   setModalType('');
+      // }catch(error){
+      //   console.log("Failed to create channels.")
+      //   alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.") 
+      //   setModalType('');
+      // }
     }
   };
   
   return ReactDOM.createPortal(
     <>
       <Backdrop onClick={handleClose}/>
-        <ModalContainer>
+        <ModalForm onSubmit={handleConfirm}>
           <ModalTop>
             <ModalTitle>{type == 'create' ? '채널 생성' : '채널을 나가시겠습니까?'}</ModalTitle> 
             {type == 'create' ?
@@ -39,15 +60,20 @@ const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
           </ModalTop>
           {type == 'create' ?
             <ModalInputWrapper>
-              <ModalInput placeholder="새로운 채널" onChange={handleInputChange} />
+              <ModalInput placeholder="새로운 채널" onChange={handleInputChange} ref={inputRef} />
             </ModalInputWrapper> 
           :null}   
+          <ErrorMsgWrapper>
+            <ErrorMsg>
+              {errorMsg}
+            </ErrorMsg>
+          </ErrorMsgWrapper>
           <ModalConfirmWrapper>
             {type == 'create'?
-              <ModalConfirm onClick={handleConfirm}>확인</ModalConfirm>
+              <ModalButton disabled={disabled}>확인</ModalButton>
             :null}
           </ModalConfirmWrapper>
-        </ModalContainer>
+        </ModalForm>
       </>
       ,
       document.getElementById('root') as HTMLElement
@@ -55,14 +81,14 @@ const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
     );
 }
 
-const ModalContainer = styled.div`
+const ModalForm = styled.form`
   position: fixed;
   z-index: 1002;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 512px;
-  height: 240px;
+  height: 260px;
   background-color: white;
   border-radius: 20px;
 `;
@@ -113,20 +139,33 @@ const ModalInput = styled.input`
     outline-color: #3081f6;
   }
 `;
+const ErrorMsgWrapper = styled.div`
+  width: 512px;
+  display: flex;
+  justify-content: center;
+`;
+const ErrorMsg = styled.div`
+  width: 388px;
+  height: 36px;
+  color: red;
+  display: flex;
+  align-items: center;
+`;
 const ModalConfirmWrapper = styled.div`
   width: 100%;
   height: 48px;
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 0;
 `;
-const ModalConfirm = styled.div`
+const ModalButton = styled.button`
   width: 448px;
   height: 48px;
   background-color: #3081F6;
   color: white;
   border-radius: 15px;
   font-size: 22px;
+  border: none;
   display: flex;
   align-items: center;
   justify-content : center;
