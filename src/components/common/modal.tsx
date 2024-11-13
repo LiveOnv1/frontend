@@ -2,18 +2,20 @@ import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 import CloseIcon from '../../assets/CloseIcon.png';
 import {useState, useRef, useEffect } from 'react';
+import { getChannel, postChannel } from '../../api/channelApi';
+import { useStore } from '../../store/store';
 
 interface ModalProps {
   type: string;
   onClose: (type:string) => void;
-  onConfirm: (channelName: string) => void;
 }
 
-const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
+const Modal = ({ type, onClose }: ModalProps) => {
   const [channelName, setChannelName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const [disabled, setDisabled] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const setSelectedChannel = useStore((state) => state.setSelectedChannel);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -27,22 +29,20 @@ const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
     setChannelName(e.target.value);
     setErrorMsg('');
   };
-  const handleConfirm = (e: React.FormEvent) => {
+  const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
     if(channelName.length <= 0){
       setErrorMsg('채널이름을 입력해주세요');
     }else if (type === 'create') {
-      onConfirm(channelName);
-      // try{
-      //   await postChannel(channelName);
-      //   getChannel();
-      //   setSelectedChannel(channelName);
-      //   setModalType('');
-      // }catch(error){
-      //   console.log("Failed to create channels.")
-      //   alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.") 
-      //   setModalType('');
-      // }
+      try{
+        await postChannel(channelName);
+        getChannel();
+        setSelectedChannel(channelName);
+        onClose('');
+      }catch(error){
+        alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.") 
+        onClose('');
+      }
     }
   };
   
@@ -70,7 +70,7 @@ const Modal = ({ type, onClose, onConfirm}: ModalProps) => {
           </ErrorMsgWrapper>
           <ModalConfirmWrapper>
             {type == 'create'?
-              <ModalButton disabled={disabled}>확인</ModalButton>
+              <ModalButton>확인</ModalButton>
             :null}
           </ModalConfirmWrapper>
         </ModalForm>
