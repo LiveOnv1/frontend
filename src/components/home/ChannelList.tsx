@@ -31,18 +31,6 @@ const ChannelList = () => {
     setModalType("create");
   };
 
-  const handleCreateConfirm = async (channelName: string) => {
-    try{
-      await postChannel(channelName);
-      getChannel();
-      setSelectedChannel(channelName);
-      setModalType('');
-    }catch(error){
-      console.log("Failed to create channels.")
-      alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.")  
-    }
-  };
-
   useEffect(() => {
     const getChannels = async () => {
       try{
@@ -68,9 +56,9 @@ const ChannelList = () => {
         <ChannelItemContainer>
           {channels.map((channel, idx) => (
             <ChannelItem 
-            key={idx}
-            onClick={() => handleChannelClick(channel.chatRoomName)}
-            isSelected={selectedChannel == channel.chatRoomName}
+              key={idx}
+              onClick={() => handleChannelClick(channel.chatRoomName)}
+              isSelected={selectedChannel == channel.chatRoomName}
             >
               <>
               # {channel.chatRoomName}
@@ -81,7 +69,7 @@ const ChannelList = () => {
         </ChannelItemContainer>
       )}
       {modalType && (
-        <Modal type={modalType} onClose={setModalType} onConfirm={handleCreateConfirm} />
+        <Modal type={modalType} onClose={setModalType} />
       )}
     </ChannelListContainer>
   );
