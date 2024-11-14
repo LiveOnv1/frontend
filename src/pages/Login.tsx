@@ -9,17 +9,17 @@ const Login = () => {
   const URL = 'http://3.39.74.178:8080';
   const navigate = useNavigate();
   const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
-
+  axios.defaults.withCredentials = true;
+  
   const handleLogin = async (id: string, password: string) => {
-    
     try {
       const response = await axios.post(URL + '/api/login', {
         personId: id,
         personPassword: password,
-      });
+      },{withCredentials: true});
 
       console.log("Login successful:", response.data);
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('personId', id);
       setIsLoggedIn(true);
       navigate('/home');
 

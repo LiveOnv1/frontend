@@ -1,10 +1,13 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://3.39.74.178:8080/api/chat-room';
+axios.defaults.withCredentials = true;
 
 export const getChannel = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}`);
+    const response = await axios.get(`${BASE_URL}`,
+      {withCredentials: true}
+    );
     return response.data;
   } catch (error) {
     console.error("Failed to fetch channels", error);
@@ -12,15 +15,7 @@ export const getChannel = async () => {
   }
 };
 
-export const postChannel = async (channelName: string) => {
-  console.log(channelName);
-  try {
-    const response = await axios.post(`${BASE_URL}`, {
-      chatRoomName: channelName
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Failed to create channel", error);
-    throw error;
-  }
+export const postChannel = async (channelName: string, ) => {
+  const response = await axios.post(BASE_URL, {chatRoomName: channelName}, {withCredentials: true}); 
+  return response.data;
 };

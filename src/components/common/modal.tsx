@@ -35,12 +35,13 @@ const Modal = ({ type, onClose }: ModalProps) => {
       setErrorMsg('채널이름을 입력해주세요');
     }else if (type === 'create') {
       try{
-        await postChannel(channelName);
+        const data = await postChannel(channelName);
         getChannel();
         setSelectedChannel(channelName);
         onClose('');
       }catch(error){
         alert("채널 생성에 실패했습니다.\n관리자에게 문의해주세요.") 
+        console.log(error);
         onClose('');
       }
     }

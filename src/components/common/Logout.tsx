@@ -12,13 +12,12 @@ const Logout: React.FC = () => {
     const logout = async () => {
       try {
         await axios.post(`${URL}/api/logout`);
-        localStorage.removeItem('token');
+        localStorage.removeItem('personId');
         setIsLoggedIn(false);
       } catch (error) {
         console.error("Logout failed", error);
       }
     };
-
     logout();
   }, [setIsLoggedIn]);
 

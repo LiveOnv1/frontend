@@ -7,8 +7,8 @@ import Modal from '../common/modal';
 import { getChannel, postChannel } from '../../api/channelApi';
 
 interface Channel {
-  id: number;
   chatRoomName: string;
+  chatRoomId: number;
 }
 
 const ChannelList = () => {
@@ -18,9 +18,11 @@ const ChannelList = () => {
 
   const selectedChannel = useStore((state) => state.selectedChannel);
   const setSelectedChannel = useStore((state) => state.setSelectedChannel);
+  const setSelectedChannelId = useStore((state) => state.setSelectedChannelId);
 
-  const handleChannelClick = (channel:string) => {
+  const handleChannelClick = (channel:string, id:number) => {
     setSelectedChannel(channel);
+    setSelectedChannelId(id);
   };
 
   const toggleChannels = () => {
@@ -42,8 +44,6 @@ const ChannelList = () => {
     }
     getChannels();
   }, []);
-
-
   return (
     <ChannelListContainer>
       <ChannelTitle onClick={toggleChannels}>
@@ -54,10 +54,10 @@ const ChannelList = () => {
       </ChannelTitle>
       {isExpanded && (
         <ChannelItemContainer>
-          {channels.map((channel, idx) => (
+          {channels.map((channel) => (
             <ChannelItem 
-              key={idx}
-              onClick={() => handleChannelClick(channel.chatRoomName)}
+              key={channel.chatRoomId}
+              onClick={() => handleChannelClick(channel.chatRoomName, channel.chatRoomId)}
               isSelected={selectedChannel == channel.chatRoomName}
             >
               <>

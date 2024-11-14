@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/'; // json-server 주소
+const BASE_URL = 'https://3.39.74.178:8080/api';
+axios.defaults.withCredentials = true;
 
-export const getChats = async () => {
-  const response = await axios.get(BASE_URL);
-  return response.data;
+export const getChats = (roomId : number, page=0, size=20) => {
+  return axios.get(`${BASE_URL}/chat-room/${roomId}/messages`, {
+    params: { page, size },
+});
 };
 
 export const postChat = async (chatData: { content: string; sender: string; timestamp: string }) => {

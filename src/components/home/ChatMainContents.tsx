@@ -9,29 +9,18 @@ interface Chat {
   sender: string;
   timestamp: string;
 }
-interface Channel {
-  channelName: string;
-  chats: Chat[];
-}
-
-interface Category {
-  category: string;
-  channels: Channel[];
-}
 
 const ChatMainContents = () => {
   const selectedChannel = useStore((state) => state.selectedChannel);
+  const selectedChannelId = useStore((state) => state.selectedChannelId);
   const [chats, setChats] = useState<Chat[]>([]);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchChats = async () => {
       try{
-        //const idx = selectedCategory == '백엔드' ? 0 : ('프론트엔드' ? 1 : -1)
-        const data: Category = await getChats(); // getChats의 반환값 타입 지정
-        const filteredChats = data.channels
-          .find((ch) => ch.channelName === selectedChannel)?.chats || [];
-        setChats(filteredChats);
+        const response = await getChats(selectedChannelId);
+        setChats(response.data);
         setError(false);
       }catch{
         setError(true);
@@ -39,15 +28,16 @@ const ChatMainContents = () => {
     };
     fetchChats();
   }, [selectedChannel]);
-
   return (
     <Container>
         {selectedChannel ? 
           (
             <Content>
               {error ? (
-                  <ErrorMessage>채팅을 불러오지 못했습니다. 관리자에게 문의해주세요.</ErrorMessage> // 에러 메시지 표시
-                ) : (
+                <ErrorMessage>채팅을 불러오지 못했습니다. 관리자에게 문의해주세요.</ErrorMessage>
+              ) : chats.length==0 ? (
+                <ErrorMessage>아직 입력된 채팅이 없어요</ErrorMessage>
+              ) : (
                   chats.map((chat, index) => (
                     <ChatWrapper key={index}>
                       <ChatProfileImg src={ProfileIcon}/>
