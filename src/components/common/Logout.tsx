@@ -6,7 +6,7 @@ import { useStore } from '../../store/store';
 const Logout: React.FC = () => {
   const isLoggedIn = useStore((state) => state.isLoggedIn);
   const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
-  const URL = 'http://3.39.74.178:8080';
+  const URL = 'https://capserver.link';
 
   useEffect(() => {
     const logout = async () => {
