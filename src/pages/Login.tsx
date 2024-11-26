@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/store';
 
 const Login = () => {
-  const URL = 'http://3.39.74.178:8080';
+  const URL = 'https://capserver.link';
   const navigate = useNavigate();
   const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
   axios.defaults.withCredentials = true;
