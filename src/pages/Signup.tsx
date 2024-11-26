@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
-  const URL = 'https://capserver.link';
+  const URL = 'https://www.capserver.link';
 
   const handleSignup = async (id: string, password: string) => {
     try {
