@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const isLoggedIn = useStore((state) => state.isLoggedIn);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <OnboardingPage />} />
         <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
@@ -19,7 +19,7 @@ const App: React.FC = () => {
         <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <SignupPage />} />
         <Route path="/logout" element={isLoggedIn ? <Logout /> : <Navigate to="/" />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
