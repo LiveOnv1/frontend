@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://3.39.74.178:8080/api/chat-room';
+const BASE_URL = 'https://capserver.link/api/chat-room';
 axios.defaults.withCredentials = true;
 
 export const getChannel = async () => {
