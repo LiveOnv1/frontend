@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://capserver.link/api';
+const BASE_URL = 'https://www.capserver.link/api';
 axios.defaults.withCredentials = true;
 
 export const getChats = (roomId : number, page=0, size=20) => {
